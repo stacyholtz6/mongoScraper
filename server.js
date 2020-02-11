@@ -24,24 +24,44 @@ mongoose.connect('mongodb://localhost/articleScraper', {
 });
 
 
-
 // Routes
 
-// GET route for scraping - pick a website
+// GET route for scraping - pick a website ✅ 
+axios.get('https://css-tricks.com/').then(function (response) {
 
+  var $ = cheerio.load(response.data);
 
+  var results = [];
+
+  $('div.article-article h2').each(function (i, element) {
+
+    var title = $(element).text();
+
+    var summary = $('div.article-content p').text();
+
+    var link = $(element)
+      .children()
+      .attr('href');
+
+    results.push({
+      title: title,
+      link: link,
+      summary: summary
+    });
+  });
+
+  console.log(results);
+});
 
 // Route for getting all articles from the DB
 
 
-// Route for grabbing a specific article by id, populate it with it's note
 
+// Route for grabbing a specific article by id, populate it with it's note
 
 // Route for saving/updateing an article's associated note
 
-
-
 // Start the server
-app.listen(PORT, function () {
+app.listen(PORT, function() {
   console.log('App running on port ' + PORT + '!');
 });
