@@ -23,43 +23,61 @@ mongoose.connect('mongodb://localhost/articleScraper', {
   useNewUrlParser: true
 });
 
-
 // Routes
 
-// GET route for scraping - pick a website ✅ 
-axios.get('https://css-tricks.com/').then(function (response) {
+// GET route for scraping - scrape works - need summary
+app.get('/scrape', function(req, res) {
+  axios.get('https://css-tricks.com/').then(function(response) {
+    var $ = cheerio.load(response.data);
 
-  var $ = cheerio.load(response.data);
+    $('div.article-article h2').each(function(i, element) {
+      var result = {};
 
-  var results = [];
+      result.title = $(this).text();
+      // come back to the summary later
+      // var summary = $('div.article-content p').text();
 
-  $('div.article-article h2').each(function (i, element) {
+      result.link = $(this)
+        .children()
+        .attr('href');
 
-    var title = $(element).text();
-
-    var summary = $('div.article-content p').text();
-
-    var link = $(element)
-      .children()
-      .attr('href');
-
-    results.push({
-      title: title,
-      link: link,
-      summary: summary
+      db.Article.create(result)
+        .then(function(dbArticle) {
+          console.log(dbArticle);
+        })
+        .catch(function(err) {
+          console.log(err);
+        });
     });
-  });
 
-  console.log(results);
+    // console.log(results);
+    res.send('Scrape Complete');
+  });
 });
 
-// Route for getting all articles from the DB
 
-
+// Route for getting all articles from the DB - WORKS!! ✅ 
+app.get('/articles', function(req, res) {
+  db.Article.find({})
+    .then(function(dbArticle) {
+      res.json(dbArticle);
+    })
+    .catch(function(err) {
+      res.json(err);
+    });
+});
 
 // Route for grabbing a specific article by id, populate it with it's note
 
+
+
+
+
 // Route for saving/updateing an article's associated note
+
+
+
+
 
 // Start the server
 app.listen(PORT, function() {
