@@ -19,11 +19,29 @@ app.use(express.json());
 app.use(express.static('public'));
 
 // Connect to the Mongo DB
-mongoose.connect('mongodb://localhost/unit18Populater', {
+mongoose.connect('mongodb://localhost/articleScraper', {
   useNewUrlParser: true
 });
 
+
+
+// Routes
+
+// GET route for scraping - pick a website
+
+
+
+// Route for getting all articles from the DB
+
+
+// Route for grabbing a specific article by id, populate it with it's note
+
+
+// Route for saving/updateing an article's associated note
+
+
+
 // Start the server
-app.listen(PORT, function() {
+app.listen(PORT, function () {
   console.log('App running on port ' + PORT + '!');
 });
