@@ -1,3 +1,6 @@
+body {
+  background: yellow;
+}
 #wrapper {
         width: 960px;
         margin-left: auto;
