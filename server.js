@@ -35,17 +35,21 @@ app.get('/scrape', function(req, res) {
   axios.get('https://www.reviewjournal.com/').then(function(response) {
     var $ = cheerio.load(response.data);
 
-    $('div.entry-title').each(function(i, element) {
+    $('article.post').each(function(i, element) {
       var result = {};
 
-      result.title = $(this).text();
+      result.title = $(this)
+        .find('div.entry-title')
+        .text();
 
       result.link = $(this)
+        .find('div.entry-title')
         .children()
         .attr('href');
 
       // var summary = $('div.article-content p').text();
-      // result.summary = $(this).parent();
+     result.summary = $(this).find('div.field-excerpt p').text();
+      // .parent();
       // .next()
       // .hasClass('field-excerpt')
       // .closest('p')

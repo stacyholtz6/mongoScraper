@@ -2,13 +2,16 @@ var mongoose = require('mongoose');
 
 var Schema = mongoose.Schema;
 
-// Still need summary
 var ArticleSchema = new Schema({
   title: {
     type: String,
     require: true
   },
   link: {
+    type: String,
+    required: true
+  },
+  summary: {
     type: String,
     required: true
   },
