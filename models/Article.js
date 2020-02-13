@@ -12,8 +12,9 @@ var ArticleSchema = new Schema({
     required: true
   },
   summary: {
-    type: String,
-    required: true
+    type: String
+    // not all have a summary
+    // required: true
   },
   saved: {
     type: Boolean,
