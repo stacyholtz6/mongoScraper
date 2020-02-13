@@ -39,25 +39,6 @@ app.get('/', function(req, res) {
   res.render('index');
 });
 
-// app.get('/', function(req, res) {
-//   Article.find({}, null, { sort: { created: -1 } }, function(err, data) {
-//     if (data.length === 0) {
-//       res.render('placeholder', { message: 'Click Scrape for New Articles!' });
-//     } else {
-//       res.render('index', { articles: data });
-//     }
-//   });
-// });
-// app.get('/', function(req, res) {
-//   db.Article.find({}, function(error, found) {
-//     if (error) {
-//       console.log(error);
-//     } else {
-//       res.json(found);
-//     }
-//   });
-// });
-
 // GET route for scraping - scrape works - need summary
 app.get('/scrape', function(req, res) {
   axios.get('https://www.reviewjournal.com/').then(function(response) {
@@ -104,7 +85,7 @@ app.get('/articles', function(req, res) {
     });
 });
 
-// Route for getting saved articles
+// Route for getting all saved articles
 app.get('/saved', function(req, res) {
   db.Article.find({ saved: true })
     .then(function(dbArticle) {
@@ -114,6 +95,32 @@ app.get('/saved', function(req, res) {
       res.json(err);
     });
 });
+
+// route for updating an article to be marked as saved
+app.get('/saved/:id', function(req, res) {
+  db.Article.findOneAndUpdate(
+    { _id: req.params.id },
+    { $set: { saved: true } },
+    { new: true }
+  )
+    .then(function(dbArticle) {
+      res.json(dbArticle);
+    })
+    .catch(function(err) {
+      res.json(err);
+    });
+});
+
+// Route for removing saved articles
+// app.get('/saved', function (req, res) {
+//   db.Article.find({ saved: true })
+//     .then(function (dbArticle) {
+//       res.json(dbArticle);
+//     })
+//     .catch(function (err) {
+//       res.json(err);
+//     });
+// });
 
 // Route for grabbing a specific article by id, populate it with it's note
 app.get('/articles/:id', function(req, res) {
@@ -136,6 +143,19 @@ app.post('/articles/:id', function(req, res) {
       { new: true }
     );
   });
+});
+
+// Route for removing notes
+app.get('/note/:id', function(req, res) {
+  // Grab the article id from the params, find that in the db and remove the associated note
+  db.Article.update({ _id: req.params.id }, { $unset: { note: '' } })
+    .then(function(dbNote) {
+      res.json(dbNote);
+      console.log('Your note was deleted.');
+    })
+    .catch(function(err) {
+      res.json(err);
+    });
 });
 
 // Start the server

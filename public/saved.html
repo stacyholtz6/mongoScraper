@@ -11,29 +11,33 @@
   <!-- local css -->
   <link rel="stylesheet" href="style.css">
 
-  <title>Article Scraper</title>
-
+  <title>Saved Article</title>
 </head>
-<div class="jumbotron">
-  <div class="container">
-    <h1 class="display-4">Las Vegas News</h1>
-  </div>
-</div>
-<!-- Buttons -->
-<div class="buttons">
-  <button type="button" class="btn btn-danger btn-lg" id="scrape" data-toggle="modal"
-    data-target="#scrapeModal">Scrape!</button>
-  <button type="button" class="btn btn-primary btn-lg" id="gotosaved">View Your Saved Articles</button>
-</div>
 
 <body>
   <div id="wrapper">
-    <h1>Articles</h1>
-    <h2><i>Scraper</i></h2>
-    <div id="articles"></div>
-    <div id="notes"></div>
-  </div>
 
+    <!-- Jumbotron -->
+    <div class="jumbotron jumbotron-fluid">
+      <div class="container">
+        <h1 class="display-4"> Las Vegas News </h1>
+        <p class="lead">View your saved articles below.</p>
+      </div>
+    </div>
+
+    <!-- Button back to the main page -->
+    <div class="buttons">
+      <button type="button" class="btn btn-primary btn-lg" id="gotohome">Go Back to Scrape More Articles</button>
+    </div>
+
+    <h3><i>Your Vegas News</i></h3>
+
+    <!-- The articles display here -->
+    <div id="articles"></div>
+
+    <!-- The notes display here -->
+    <div id="details"></div>
+  </div>
 
   <!-- jquery CDN -->
   <script src="https://code.jquery.com/jquery-3.4.1.min.js"
