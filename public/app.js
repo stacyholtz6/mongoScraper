@@ -28,13 +28,17 @@ $('#scrape').on('click', function() {
   });
 });
 
-
 // when save article button is clicked
 
-
 // go to saved articles button
+$('#saved').on('click', function(event) {
+  window.location.href = '/saved.html';
+});
 
-
+// go back to home button
+$('#home').on('click', function(event) {
+  window.location.href = '/index.html';
+});
 
 // when p tag is clicked
 $(document).on('click', 'p', function() {
@@ -46,8 +50,7 @@ $(document).on('click', 'p', function() {
   $.ajax({
     method: 'GET',
     url: '/articles/' + thisId
-  })
-  .then(function(data) {
+  }).then(function(data) {
     console.log(data);
     // The title of the article
     $('#notes').append('<h2>' + data.title + '</h2>');
@@ -85,8 +88,7 @@ $(document).on('click', '#savenote', function() {
       // Value taken from note textarea
       body: $('#bodyinput').val()
     }
-  })
-  .then(function(data) {
+  }).then(function(data) {
     console.log(data);
 
     $('#notes').empty();
@@ -98,4 +100,3 @@ $(document).on('click', '#savenote', function() {
 });
 
 // delete note button click
-
