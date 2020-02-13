@@ -13,6 +13,12 @@ $.getJSON('/articles', function(data) {
         data[i].summary +
         '</p>'
     );
+    // add button to save articles
+    $('#articles').append(
+      "<button data-id='" +
+      data[i]._id +
+      "' id='savearticle'>Save Article</button>"
+    );
   }
 });
 
@@ -29,6 +35,7 @@ $('#scrape').on('click', function() {
 });
 
 // when save article button is clicked
+
 
 // go to saved articles button
 $('#saved').on('click', function(event) {
