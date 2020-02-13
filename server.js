@@ -1,4 +1,6 @@
+// Dependencies
 var express = require('express');
+var bodyParser = require('body-parser');
 var logger = require('morgan');
 var mongoose = require('mongoose');
 var axios = require('axios');
@@ -12,6 +14,8 @@ var app = express();
 
 // Use morgan logger for logging requests
 app.use(logger('dev'));
+// Use body-parser for handling form submissions
+app.use(bodyParser.urlencoded({ extended: true }));
 // Parse request body as JSON
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -30,6 +34,30 @@ mongoose.connect(MONGODB_URI);
 
 // Routes
 
+// Route for displaying the homepage
+app.get('/', function(req, res) {
+  res.render('index');
+});
+
+// app.get('/', function(req, res) {
+//   Article.find({}, null, { sort: { created: -1 } }, function(err, data) {
+//     if (data.length === 0) {
+//       res.render('placeholder', { message: 'Click Scrape for New Articles!' });
+//     } else {
+//       res.render('index', { articles: data });
+//     }
+//   });
+// });
+// app.get('/', function(req, res) {
+//   db.Article.find({}, function(error, found) {
+//     if (error) {
+//       console.log(error);
+//     } else {
+//       res.json(found);
+//     }
+//   });
+// });
+
 // GET route for scraping - scrape works - need summary
 app.get('/scrape', function(req, res) {
   axios.get('https://www.reviewjournal.com/').then(function(response) {
@@ -47,21 +75,11 @@ app.get('/scrape', function(req, res) {
         .children()
         .attr('href');
 
-      // var summary = $('div.article-content p').text();
-     result.summary = $(this).find('div.field-excerpt p').text();
-      // .parent();
-      // .next()
-      // .hasClass('field-excerpt')
-      // .closest('p')
-      // .children()
-      // .attr('div')
-      // .parent()
-      // .attr('p')
-      // .find('p')
-      // .parent()
-      // .children()
-      // .text();
+      result.summary = $(this)
+        .find('div.field-excerpt p')
+        .text();
 
+      // Create a new article
       db.Article.create(result)
         .then(function(dbArticle) {
           console.log(result);
@@ -70,8 +88,7 @@ app.get('/scrape', function(req, res) {
           console.log(err);
         });
     });
-    // console.log($.html());
-    // console.log(result);
+    // If articles were scraped let the client know
     res.send('Scrape Complete');
   });
 });
@@ -79,6 +96,17 @@ app.get('/scrape', function(req, res) {
 // Route for getting all articles from the DB - WORKS!! ✅
 app.get('/articles', function(req, res) {
   db.Article.find({})
+    .then(function(dbArticle) {
+      res.json(dbArticle);
+    })
+    .catch(function(err) {
+      res.json(err);
+    });
+});
+
+// Route for getting saved articles
+app.get('/saved', function(req, res) {
+  db.Article.find({ saved: true })
     .then(function(dbArticle) {
       res.json(dbArticle);
     })
