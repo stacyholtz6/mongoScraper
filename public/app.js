@@ -16,8 +16,8 @@ $.getJSON('/articles', function(data) {
     // add button to save articles
     $('#articles').append(
       "<button data-id='" +
-      data[i]._id +
-      "' id='savearticle'>Save Article</button>"
+        data[i]._id +
+        "' id='save-article'>Save Article</button>"
     );
   }
 });
@@ -35,7 +35,42 @@ $('#scrape').on('click', function() {
 });
 
 // when save article button is clicked
+$(document).on('click', '#save-article', function() {
+  // get the id of article associated with the button
+  var thisId = $(this).attr('data-id');
 
+  // post request to access the saved id
+  $.ajax({
+    method: 'POST',
+    url: '/saved/' + thisId
+  }).then(function(data) {
+    console.log(data);
+  });
+});
+
+// show the saved articles - similar to showing all the articles - Showing all not just saved 😠
+$.getJSON('/saved', function(data) {
+  // loop through each saved article
+  for (var i = 0; i < data.length; i++) {
+    $('#saved-articles').append(
+      "<p data-id='" +
+        data[i]._id +
+        "'>" +
+        data[i].title +
+        '<br />' +
+        data[i].link +
+        '<br />' +
+        data[i].summary +
+        '</p>'
+    );
+    // add delete button to saved articles - doesn't work yet 😠
+    $('#saved-articles').append(
+      "<button data-id='" +
+        data[i]._id +
+        "' id='delete-article'>Delete Article</button>"
+    );
+  }
+});
 
 // go to saved articles button
 $('#saved').on('click', function(event) {
@@ -47,7 +82,7 @@ $('#home').on('click', function(event) {
   window.location.href = '/index.html';
 });
 
-// when p tag is clicked
+// when p tag is clicked - note section shows
 $(document).on('click', 'p', function() {
   $('#notes').empty();
   // Save the id from the p tag
@@ -60,16 +95,19 @@ $(document).on('click', 'p', function() {
   }).then(function(data) {
     console.log(data);
     // The title of the article
-    $('#notes').append('<h2>' + data.title + '</h2>');
+    $('#details').append('<h2>' + data.title + '</h2>');
     // An input to enter a new title
-    $('#notes').append("<input id='titleinput' name='title' >");
+    $('#details').append("<input id='titleinput' name='title' >");
     // A textarea to add a new note body
-    $('#notes').append("<textarea id='bodyinput' name='body'></textarea>");
+    $('#details').append("<textarea id='bodyinput' name='body'></textarea>");
     // A button to submit a new note, with the id of the article saved to it
-    $('#notes').append(
+    $('#details').append(
       "<button data-id='" + data._id + "' id='savenote'>Save Note</button>"
     );
-
+    // Delete note
+    $('#details').append(
+      "<button data-id='" + data._id + "' id='deletenote'>Delete Note</button>"
+    );
     // If there's a note in the article
     if (data.note) {
       // Place the title of the note in the title input
