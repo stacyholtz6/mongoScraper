@@ -45,7 +45,7 @@ app.get('/scrape', function(req, res) {
         .attr('href');
 
       // var summary = $('div.article-content p').text();
-      result.summary = $(this).parent();
+      // result.summary = $(this).parent();
       // .next()
       // .hasClass('field-excerpt')
       // .closest('p')
@@ -63,7 +63,7 @@ app.get('/scrape', function(req, res) {
           console.log(result);
         })
         .catch(function(err) {
-          //console.log(err);
+          console.log(err);
         });
     });
     // console.log($.html());
