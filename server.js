@@ -1,5 +1,7 @@
 // Dependencies
 var express = require('express');
+// set handlebars
+var exphbs = require('express-handlebars');
 var bodyParser = require('body-parser');
 var logger = require('morgan');
 var mongoose = require('mongoose');
@@ -21,7 +23,16 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 // Make public a static folder
 app.use(express.static('public'));
-
+app.engine(
+  'handlebars',
+  exphbs({
+    defaultLayout: 'main',
+    log: function(something) {
+      console.log(something);
+    }
+  })
+);
+app.set('view engine', 'handlebars');
 // Connect to the Mongo DB
 // mongoose.connect('mongodb://localhost/articleScraper', {
 //   useNewUrlParser: true
