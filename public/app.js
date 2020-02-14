@@ -130,17 +130,41 @@ $(document).on('click', '#savenote', function() {
       // Value taken from note textarea
       body: $('#bodyinput').val()
     }
-  })
-    // With that done
-    .then(function(data) {
-      // Log the response
-      console.log(data);
-      // Empty the notes section
-      $('#notes').empty();
-    });
-  // Also, remove the values entered in the input and textarea for note entry
+  }).then(function(data) {
+    console.log(data);
+
+    $('#notes').empty();
+  });
+  // remove the values entered in the input and textarea for note entry
   $('#titleinput').val('');
   $('#bodyinput').val('');
+});
+
+// delete note - have to refresh to see that note was deleted........
+$(document).on('click', '#deletenote', function() {
+  var thisId = $(this).attr('data-id');
+  console.log('note-id', thisId);
+
+  // post request to access article
+  $.ajax({
+    method: 'GET',
+    url: '/note/' + thisId
+  }).then(function(data) {
+    console.log(data);
+  });
+});
+
+// remove from saved
+$(document).on('click', '#delete-article', function() {
+  var thisId = $(this).attr('data-id');
+  console.log('remove-saved', thisId);
+
+  $.ajax({
+    mehtod: 'GET',
+    url: '/remove/:id' + thisId
+  }).then(function(data) {
+    console.log(data);
+  });
 });
 
 // go back to home button

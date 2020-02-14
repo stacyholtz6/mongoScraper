@@ -26,11 +26,10 @@ app.use(express.json());
 var MONGODB_URI =
   process.env.MONGODB_URI || 'mongodb://localhost/articleScraper';
 
+mongoose.set('useFindAndModify', false);
 mongoose.set('useUnifiedTopology', true);
 mongoose.Promise = Promise;
 mongoose.connect(MONGODB_URI, { useNewUrlParser: true });
-
-// mongoose.set('useFindAndModify', false);
 
 // Routes
 
@@ -99,7 +98,7 @@ app.get('/saved', function(req, res) {
     });
 });
 
-// Route for updating an article to be marked as saved
+// Route for updating an article marked as saved
 app.post('/saved/:id', function(req, res) {
   // Grab the article id from the params, find that in the db and changed saved to true
   db.Article.findOneAndUpdate(
@@ -152,12 +151,26 @@ app.post('/articles/:id', function(req, res) {
 // Route for removing notes
 app.get('/note/:id', function(req, res) {
   // Grab the article id from the params, find that in the db and remove the associated note
-  db.Article.update({ _id: req.params.id }, { $unset: { note: '' } })
+  db.Article.updateOne({ _id: req.params.id }, { $unset: { note: '' } })
     .then(function(dbNote) {
       res.json(dbNote);
       console.log('Your note was deleted.');
     })
     .catch(function(err) {
+      res.json(err);
+    });
+});
+
+// remove from saved
+app.get('/remove/:id', function(req, res) {
+  // Grab the article id from the params, find that in the db and changed saved to true
+  db.Article.remove({ _id: req.params.id }, { $set: { saved: false } })
+    .then(function(dbArticle) {
+      // If we were able to successfully find Articles, send them back to the client
+      res.json(dbArticle);
+    })
+    .catch(function(err) {
+      // If an error occurred, send it to the client
       res.json(err);
     });
 });
