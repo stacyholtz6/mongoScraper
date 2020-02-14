@@ -38,20 +38,30 @@ $('#scrape').on('click', function() {
 $(document).on('click', '#save-article', function() {
   // get the id of article associated with the button
   var thisId = $(this).attr('data-id');
+  console.log('thisId-save-article', thisId);
 
-  // post request to access the saved id
+  // make a post request to get that saved id
+
   $.ajax({
     method: 'POST',
     url: '/saved/' + thisId
-  }).then(function(data) {
-    console.log(data);
-  });
+  })
+    // With that done
+    .then(function(data) {
+      // Log the response
+      console.log(data);
+    });
 });
 
-// show the saved articles - similar to showing all the articles - Showing all not just saved 😠
+// go to saved articles button
+$('#saved').on('click', function(event) {
+  window.location.href = '/saved.html';
+});
+
+// Get the saved articles as json
 $.getJSON('/saved', function(data) {
-  // loop through each saved article
   for (var i = 0; i < data.length; i++) {
+    // show article details on the page
     $('#saved-articles').append(
       "<p data-id='" +
         data[i]._id +
@@ -63,7 +73,6 @@ $.getJSON('/saved', function(data) {
         data[i].summary +
         '</p>'
     );
-    // add delete button to saved articles - doesn't work yet 😠
     $('#saved-articles').append(
       "<button data-id='" +
         data[i]._id +
@@ -71,23 +80,12 @@ $.getJSON('/saved', function(data) {
     );
   }
 });
-
-// go to saved articles button
-$('#saved').on('click', function(event) {
-  window.location.href = '/saved.html';
-});
-
-// go back to home button
-$('#home').on('click', function(event) {
-  window.location.href = '/index.html';
-});
-
-// when p tag is clicked - note section shows
+// notes section - p tag clicked - not shows
 $(document).on('click', 'p', function() {
   $('#notes').empty();
   // Save the id from the p tag
   var thisId = $(this).attr('data-id');
-
+  console.log('notes id', thisId);
   //  Ajax call for the articles
   $.ajax({
     method: 'GET',
@@ -95,17 +93,17 @@ $(document).on('click', 'p', function() {
   }).then(function(data) {
     console.log(data);
     // The title of the article
-    $('#details').append('<h2>' + data.title + '</h2>');
+    $('#notes').append('<h2>' + data.title + '</h2>');
     // An input to enter a new title
-    $('#details').append("<input id='titleinput' name='title' >");
+    $('#notes').append("<input id='titleinput' name='title' >");
     // A textarea to add a new note body
-    $('#details').append("<textarea id='bodyinput' name='body'></textarea>");
+    $('#notes').append("<textarea id='bodyinput' name='body'></textarea>");
     // A button to submit a new note, with the id of the article saved to it
-    $('#details').append(
+    $('#notes').append(
       "<button data-id='" + data._id + "' id='savenote'>Save Note</button>"
     );
     // Delete note
-    $('#details').append(
+    $('#notes').append(
       "<button data-id='" + data._id + "' id='deletenote'>Delete Note</button>"
     );
     // If there's a note in the article
@@ -118,12 +116,11 @@ $(document).on('click', 'p', function() {
   });
 });
 
-// When you click the savenote button
 $(document).on('click', '#savenote', function() {
-  // Grab the id associated with the article from the submit button
+  // Grab the id associated with the article from the submit button - Get the ID currently no error
   var thisId = $(this).attr('data-id');
-
-  // Post request to change the note
+  console.log('save-note-id', thisId);
+  // Run a POST request to change the note, using what's entered in the inputs
   $.ajax({
     method: 'POST',
     url: '/articles/' + thisId,
@@ -133,15 +130,20 @@ $(document).on('click', '#savenote', function() {
       // Value taken from note textarea
       body: $('#bodyinput').val()
     }
-  }).then(function(data) {
-    console.log(data);
-
-    $('#notes').empty();
-  });
-
+  })
+    // With that done
+    .then(function(data) {
+      // Log the response
+      console.log(data);
+      // Empty the notes section
+      $('#notes').empty();
+    });
   // Also, remove the values entered in the input and textarea for note entry
   $('#titleinput').val('');
   $('#bodyinput').val('');
 });
 
-// delete note button click
+// go back to home button
+$('#home').on('click', function(event) {
+  window.location.href = '/';
+});

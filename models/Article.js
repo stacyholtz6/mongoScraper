@@ -12,8 +12,8 @@ var ArticleSchema = new Schema({
     required: true
   },
   summary: {
-    type: String
-    // not all have a summary
+    type: String,
+    default: 'No Summary Available'
     // required: true
   },
   saved: {
