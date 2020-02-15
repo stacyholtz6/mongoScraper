@@ -161,10 +161,10 @@ app.get('/note/:id', function(req, res) {
     });
 });
 
-// remove from saved
+// remove from saved - Have to refresh to see that its been removed.....
 app.get('/remove/:id', function(req, res) {
   // Grab the article id from the params, find that in the db and changed saved to true
-  db.Article.remove({ _id: req.params.id }, { $set: { saved: false } })
+  db.Article.findByIdAndUpdate({ _id: req.params.id }, { $set: { saved: false } })
     .then(function(dbArticle) {
       // If we were able to successfully find Articles, send them back to the client
       res.json(dbArticle);

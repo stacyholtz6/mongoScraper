@@ -133,7 +133,7 @@ $(document).on('click', '#savenote', function() {
   }).then(function(data) {
     console.log(data);
 
-    $('#notes').empty();
+    // $('#notes').empty();
   });
   // remove the values entered in the input and textarea for note entry
   $('#titleinput').val('');
@@ -151,6 +151,7 @@ $(document).on('click', '#deletenote', function() {
     url: '/note/' + thisId
   }).then(function(data) {
     console.log(data);
+    $('#notes').empty();
   });
 });
 
@@ -161,7 +162,7 @@ $(document).on('click', '#delete-article', function() {
 
   $.ajax({
     mehtod: 'GET',
-    url: '/remove/:id' + thisId
+    url: '/remove/' + thisId
   }).then(function(data) {
     console.log(data);
   });
