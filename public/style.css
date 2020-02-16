@@ -1,18 +1,37 @@
-body {
-  background: yellow;
-}
-#wrapper {
+/* body {
+  background: url(magicRocks.jpeg);
+  background-repeat: no-repeat;
+  background-size: cover;
+} */
+
+/* .jumbotron {
+  background: url(welcome.jpeg);
+  background-repeat: no-repeat;
+  background-size: cover;
+} */
+
+/* #wrapper {
   width: 960px;
   margin-left: auto;
   margin-right: auto;
   padding-top: 5%;
-}
+} */
 #articles {
   display: inline-block;
   overflow: auto;
   width: 60%;
   height: 700px;
+  background-color: #fcf5c7;
 }
+
+#saved-articles {
+  display: inline-block;
+  overflow: auto;
+  width: 60%;
+  height: 700px;
+  background-color: #fcf5c7;
+}
+
 #notes {
   float: right;
   width: 30%;

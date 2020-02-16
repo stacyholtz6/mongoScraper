@@ -35,10 +35,10 @@ mongoose.connect(MONGODB_URI, { useNewUrlParser: true });
 
 // Route for displaying the homepage
 app.get('/', function(req, res) {
-  res.render('index');
+  res.send(index.html);
 });
 
-// GET route for scraping - scrape works - need summary
+// GET route for scraping - scrape works
 app.get('/scrape', function(req, res) {
   axios.get('https://www.reviewjournal.com/').then(function(response) {
     var $ = cheerio.load(response.data);
@@ -59,6 +59,8 @@ app.get('/scrape', function(req, res) {
         .find('div.field-excerpt p')
         .text();
 
+      // want to sort these by date, most recent
+
       // Create a new article
       db.Article.create(result)
         .then(function(dbArticle) {
@@ -69,7 +71,8 @@ app.get('/scrape', function(req, res) {
         });
     });
     // If articles were scraped let the client know
-    res.send('Scrape Complete');
+    // res.send('Scrape Complete');
+    console.log('scrape complete');
   });
 });
 
@@ -89,11 +92,9 @@ app.get('/saved', function(req, res) {
   // Grab every document in the Articles collection with saved equal to true
   db.Article.find({ saved: true })
     .then(function(dbArticle) {
-      // If we were able to successfully find saved Articles, send them back to the client
       res.json(dbArticle);
     })
     .catch(function(err) {
-      // If an error occurred, send it to the client
       res.json(err);
     });
 });
@@ -164,7 +165,10 @@ app.get('/note/:id', function(req, res) {
 // remove from saved - Have to refresh to see that its been removed.....
 app.get('/remove/:id', function(req, res) {
   // Grab the article id from the params, find that in the db and changed saved to true
-  db.Article.findByIdAndUpdate({ _id: req.params.id }, { $set: { saved: false } })
+  db.Article.findByIdAndUpdate(
+    { _id: req.params.id },
+    { $set: { saved: false } }
+  )
     .then(function(dbArticle) {
       // If we were able to successfully find Articles, send them back to the client
       res.json(dbArticle);

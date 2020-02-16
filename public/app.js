@@ -8,16 +8,16 @@ $.getJSON('/articles', function(data) {
         "'>" +
         data[i].title +
         '<br />' +
-        data[i].link +
-        '<br />' +
         data[i].summary +
+        '<br />' +
+        data[i].link +
         '</p>'
     );
     // add button to save articles
     $('#articles').append(
       "<button data-id='" +
         data[i]._id +
-        "' id='save-article'>Save Article</button>"
+        "' id='save-article' class='btn btn-success'>Save Article</button>"
     );
   }
 });
@@ -76,8 +76,9 @@ $.getJSON('/saved', function(data) {
     $('#saved-articles').append(
       "<button data-id='" +
         data[i]._id +
-        "' id='delete-article'>Delete Article</button>"
+        "' id='delete-article' class='btn btn-danger'>Delete Article</button>"
     );
+    //  location.reload();
   }
 });
 // notes section - p tag clicked - not shows
@@ -100,11 +101,11 @@ $(document).on('click', 'p', function() {
     $('#notes').append("<textarea id='bodyinput' name='body'></textarea>");
     // A button to submit a new note, with the id of the article saved to it
     $('#notes').append(
-      "<button data-id='" + data._id + "' id='savenote'>Save Note</button>"
+      "<button data-id='" + data._id + "' id='savenote' class='btn btn-success'>Save Note</button>"
     );
     // Delete note
     $('#notes').append(
-      "<button data-id='" + data._id + "' id='deletenote'>Delete Note</button>"
+      "<button data-id='" + data._id + "' id='deletenote' class='btn btn-danger'>Delete Note</button>"
     );
     // If there's a note in the article
     if (data.note) {
@@ -133,7 +134,6 @@ $(document).on('click', '#savenote', function() {
   }).then(function(data) {
     console.log(data);
 
-    // $('#notes').empty();
   });
   // remove the values entered in the input and textarea for note entry
   $('#titleinput').val('');
@@ -151,7 +151,8 @@ $(document).on('click', '#deletenote', function() {
     url: '/note/' + thisId
   }).then(function(data) {
     console.log(data);
-    $('#notes').empty();
+    location.reload();
+    // $('#notes').empty();
   });
 });
 
@@ -165,6 +166,7 @@ $(document).on('click', '#delete-article', function() {
     url: '/remove/' + thisId
   }).then(function(data) {
     console.log(data);
+    location.reload();
   });
 });
 
