@@ -65,13 +65,15 @@ app.get('/scrape', function(req, res) {
       db.Article.create(result)
         .then(function(dbArticle) {
           console.log(result);
+          // res.json()
         })
         .catch(function(err) {
           console.log(err);
         });
     });
+    // res.json();
     // If articles were scraped let the client know
-    // res.send('Scrape Complete');
+    res.send();
     console.log('scrape complete');
   });
 });
@@ -79,7 +81,11 @@ app.get('/scrape', function(req, res) {
 // Route for getting all articles from the DB - WORKS!! ✅
 app.get('/articles', function(req, res) {
   db.Article.find({})
+    .sort({ created: 'desc' })
     .then(function(dbArticle) {
+      console.log("I'm here....");
+      console.log('dbArticle', dbArticle[0]);
+      console.log('dbArticle', dbArticle[1]);
       res.json(dbArticle);
     })
     .catch(function(err) {

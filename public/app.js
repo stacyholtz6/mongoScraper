@@ -1,5 +1,6 @@
 // Grab the articles as a json
 $.getJSON('/articles', function(data) {
+  console.log('data', data);
   for (var i = 0; i < data.length; i++) {
     // Display the information on the page
     $('#articles').append(
@@ -24,13 +25,16 @@ $.getJSON('/articles', function(data) {
 
 // when the scrape button is clicked
 $('#scrape').on('click', function() {
+  console.log('Scraping.....');
   $.ajax({
     type: 'GET',
-    dataType: 'json',
-    url: '/scrape',
-    success: function(response) {
-      $('#articles').empty();
-    }
+    // dataType: 'json',
+    url: '/scrape'
+  }).then(function(data) {
+    console.log('scrape', data);
+    $('#articles').empty();
+    // console.log('htmlText', htmlText);
+    location.reload();
   });
 });
 
@@ -101,11 +105,15 @@ $(document).on('click', 'p', function() {
     $('#notes').append("<textarea id='bodyinput' name='body'></textarea>");
     // A button to submit a new note, with the id of the article saved to it
     $('#notes').append(
-      "<button data-id='" + data._id + "' id='savenote' class='btn btn-success'>Save Note</button>"
+      "<button data-id='" +
+        data._id +
+        "' id='savenote' class='btn btn-success'>Save Note</button>"
     );
     // Delete note
     $('#notes').append(
-      "<button data-id='" + data._id + "' id='deletenote' class='btn btn-danger'>Delete Note</button>"
+      "<button data-id='" +
+        data._id +
+        "' id='deletenote' class='btn btn-danger'>Delete Note</button>"
     );
     // If there's a note in the article
     if (data.note) {
@@ -133,7 +141,6 @@ $(document).on('click', '#savenote', function() {
     }
   }).then(function(data) {
     console.log(data);
-
   });
   // remove the values entered in the input and textarea for note entry
   $('#titleinput').val('');
