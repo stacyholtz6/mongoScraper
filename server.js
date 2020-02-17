@@ -59,8 +59,6 @@ app.get('/scrape', function(req, res) {
         .find('div.field-excerpt p')
         .text();
 
-      // want to sort these by date, most recent
-
       // Create a new article
       db.Article.create(result)
         .then(function(dbArticle) {
@@ -71,17 +69,15 @@ app.get('/scrape', function(req, res) {
           console.log(err);
         });
     });
-    // res.json();
-    // If articles were scraped let the client know
+
     res.send();
-    console.log('scrape complete');
   });
 });
 
-// Route for getting all articles from the DB - WORKS!! ✅
+// Route for getting all articles from the DB
 app.get('/articles', function(req, res) {
   db.Article.find({})
-    .sort({ created: 'desc' })
+    .sort({ created: 'asc' })
     .then(function(dbArticle) {
       console.log("I'm here....");
       console.log('dbArticle', dbArticle[0]);
@@ -161,7 +157,6 @@ app.get('/note/:id', function(req, res) {
   db.Article.updateOne({ _id: req.params.id }, { $unset: { note: '' } })
     .then(function(dbNote) {
       res.json(dbNote);
-      console.log('Your note was deleted.');
     })
     .catch(function(err) {
       res.json(err);

@@ -18,7 +18,7 @@ $.getJSON('/articles', function(data) {
     $('#articles').append(
       "<button data-id='" +
         data[i]._id +
-        "' id='save-article' class='btn btn-success'>Save Article</button>"
+        "' id='save-article' class='btn btn-info'>Save Article</button>"
     );
   }
 });
@@ -80,7 +80,7 @@ $.getJSON('/saved', function(data) {
     $('#saved-articles').append(
       "<button data-id='" +
         data[i]._id +
-        "' id='delete-article' class='btn btn-danger'>Delete Article</button>"
+        "' id='delete-article' class='btn btn-dark'>Delete Article</button>"
     );
     //  location.reload();
   }
@@ -107,13 +107,13 @@ $(document).on('click', 'p', function() {
     $('#notes').append(
       "<button data-id='" +
         data._id +
-        "' id='savenote' class='btn btn-success'>Save Note</button>"
+        "' id='savenote' class='btn btn-info'>Save Note</button>"
     );
     // Delete note
     $('#notes').append(
       "<button data-id='" +
         data._id +
-        "' id='deletenote' class='btn btn-danger'>Delete Note</button>"
+        "' id='deletenote' class='btn btn-dark'>Delete Note</button>"
     );
     // If there's a note in the article
     if (data.note) {
@@ -126,7 +126,7 @@ $(document).on('click', 'p', function() {
 });
 
 $(document).on('click', '#savenote', function() {
-  // Grab the id associated with the article from the submit button - Get the ID currently no error
+  // Grab the id associated with the article from the submit button
   var thisId = $(this).attr('data-id');
   console.log('save-note-id', thisId);
   // Run a POST request to change the note, using what's entered in the inputs
@@ -140,14 +140,13 @@ $(document).on('click', '#savenote', function() {
       body: $('#bodyinput').val()
     }
   }).then(function(data) {
-    console.log(data);
   });
   // remove the values entered in the input and textarea for note entry
   $('#titleinput').val('');
   $('#bodyinput').val('');
 });
 
-// delete note - have to refresh to see that note was deleted........
+// delete note - 
 $(document).on('click', '#deletenote', function() {
   var thisId = $(this).attr('data-id');
   console.log('note-id', thisId);
@@ -157,7 +156,6 @@ $(document).on('click', '#deletenote', function() {
     method: 'GET',
     url: '/note/' + thisId
   }).then(function(data) {
-    console.log(data);
     location.reload();
     // $('#notes').empty();
   });
@@ -172,7 +170,6 @@ $(document).on('click', '#delete-article', function() {
     mehtod: 'GET',
     url: '/remove/' + thisId
   }).then(function(data) {
-    console.log(data);
     location.reload();
   });
 });

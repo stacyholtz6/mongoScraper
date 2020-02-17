@@ -1,14 +1,20 @@
-/* body {
-  background: url(lasvegas.jpeg);
-  background-repeat: no-repeat;
-  background-size: cover;
-} */
+body {
+  background: #085078; /* fallback for old browsers */
+  background: -webkit-linear-gradient(
+    to right,
+    #85d8ce,
+    #085078
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    to right,
+    #85d8ce,
+    #085078
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
 
-/* .jumbotron {
-  background: url(welcome.jpeg);
-  background-repeat: no-repeat;
-  background-size: cover;
-} */
+.jumbotron {
+  background-color: lightgray;
+}
 
 #articles {
   display: inline-block;
